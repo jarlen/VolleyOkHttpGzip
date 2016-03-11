@@ -24,8 +24,11 @@ import android.os.Build;
 
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
+import com.android.volley.okhttp.OkHttpStack;
 
 import java.io.File;
+
+import okhttp3.OkHttpClient;
 
 public class Volley {
 
@@ -36,14 +39,21 @@ public class Volley {
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
      * You may set a maximum size of the disk cache in bytes.
      *
-     * @param context A {@link Context} to use for creating the cache dir.
+     * @param context A {@link Context} to use for getting the packname.
+     * @param customCacheDir to use for creating the cache dir. use the default cache dir when it is NULL.
      * @param stack An {@link HttpStack} to use for the network, or null for default.
      * @param maxDiskCacheBytes the maximum size of the disk cache, in bytes. Use -1 for default size.
      * @return A started {@link RequestQueue} instance.
      */
-    public static RequestQueue newRequestQueue(Context context, HttpStack stack, int maxDiskCacheBytes) {
+    public static RequestQueue newRequestQueue(Context context,String customCacheDir, HttpStack stack, int maxDiskCacheBytes) {
         File cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);
 
+        if (customCacheDir != null) {
+			cacheDir = new File(customCacheDir, DEFAULT_CACHE_DIR);
+		} else {
+			cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);
+		}
+        
         String userAgent = "volley/0";
         try {
             String packageName = context.getPackageName();
@@ -85,35 +95,78 @@ public class Volley {
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
      * You may set a maximum size of the disk cache in bytes.
      *
-     * @param context A {@link Context} to use for creating the cache dir.
+     * @param context A {@link Context} to use for getting the packname.
+     * @param customCacheDir to use for creating the cache dir. use the default cache dir when it is NULL.
      * @param maxDiskCacheBytes the maximum size of the disk cache, in bytes. Use -1 for default size.
      * @return A started {@link RequestQueue} instance.
      */
-    public static RequestQueue newRequestQueue(Context context, int maxDiskCacheBytes) {
-        return newRequestQueue(context, null, maxDiskCacheBytes);
+    public static RequestQueue newRequestQueue(Context context,String customCacheDir, int maxDiskCacheBytes) {
+        return newRequestQueue(context, customCacheDir,null, maxDiskCacheBytes);
     }
     
     /**
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
      *
-     * @param context A {@link Context} to use for creating the cache dir.
+     * @param context A {@link Context} to use for getting the packname.
+     * @param customCacheDir to use for creating the cache dir. use the default cache dir when it is NULL.
      * @param stack An {@link HttpStack} to use for the network, or null for default.
      * @return A started {@link RequestQueue} instance.
      */
-    public static RequestQueue newRequestQueue(Context context, HttpStack stack)
+    public static RequestQueue newRequestQueue(Context context,String customCacheDir, HttpStack stack)
     {
-    	return newRequestQueue(context, stack, -1);
+    	return newRequestQueue(context, customCacheDir,stack, -1);
     }
+    
     
     /**
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
-     *
-     * @param context A {@link Context} to use for creating the cache dir.
+     * 
+     * @param context A {@link Context} to use for getting the packname.
+     * @param customCacheDir to use for creating the cache dir. use the default cache dir when it is NULL.
      * @return A started {@link RequestQueue} instance.
      */
-    public static RequestQueue newRequestQueue(Context context) {
-        return newRequestQueue(context, null);
+    public static RequestQueue newRequestQueue(Context context,String customCacheDir) {
+        return newRequestQueue(context, customCacheDir,null);
     }
+    
+    
+    /**
+     * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
+     * 
+     * @param context
+     * context A {@link Context} to use for creating the cache dir.
+     * @return A started {@link RequestQueue} instance.
+     */
+    public static RequestQueue newRequestQueue(Context context){
+    	return newRequestQueue(context, null,null);
+    }
+    
+    
+    /**
+	 * Creates a default instance of the worker pool and calls
+	 * {@link RequestQueue#start()} on it.
+	 * 
+	 * @param context A {@link Context} to use for getting the packname.
+	 * @param customCacheDir to use for creating the cache dir. use the default cache dir when it is NULL.
+	 * @return A started {@link RequestQueue} instance(with {@link OkHttpClient}).
+	 */
+	public static RequestQueue newRequestQueueWithOkHttp(Context context,
+			String customCacheDir) {
+		return newRequestQueue(context, customCacheDir, new OkHttpStack(
+				new OkHttpClient()));
+	}
+
+	/**
+	 * Creates a default instance of the worker pool and calls
+	 * {@link RequestQueue#start()} on it.
+	 * 
+	 * @param context A {@link Context} to use for creating the cache dir.
+	 * @return A started {@link RequestQueue} instance(with {@link OkHttpClient}).
+	 */
+	public static RequestQueue newRequestQueueWithOkHttp(Context context) {
+		return newRequestQueue(context, null, new OkHttpStack(
+				new OkHttpClient()));
+	}
 
 }
 
