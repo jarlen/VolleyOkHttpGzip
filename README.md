@@ -13,4 +13,6 @@ okio(Mirror : https://github.com/square/okio).
 
 2.  add MapRequest
 
-3.  OkHttpClient as the transport layer for Volley   
+3.  OkHttpClient as the transport layer for Volley 
+
+4.	Add gzip response for volley  response
