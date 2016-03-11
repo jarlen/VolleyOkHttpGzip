@@ -12,3 +12,5 @@ okio(Mirror : https://github.com/square/okio).
 1.  modify volley source code for the cachekey of jsonRequest ,like this mark(@github.com/jarlen) in JsonRequest.java
 
 2.  add MapRequest
+
+3.  OkHttpClient as the transport layer for Volley   
