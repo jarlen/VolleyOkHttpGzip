@@ -9,18 +9,14 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import com.android.volley.NetworkResponse;
 
-/**
- * @author :jarlen
- * @date : 2016-3-11
- */
 public class GzipUtil {
 
 	public static final String HEADER_ENCODING = "Content-Encoding";
+	public static final String HEADER_ACCEPT_ENCODING = "Accept-Encoding";
 	public static final String ENCODING_GZIP = "gzip";
-	public static final String HEADER_USER_GZIP = "Gzip";
 
 	/**
-	 * gzip compress
+	 * 
 	 * @param str
 	 * @param charset
 	 * @return
@@ -48,7 +44,7 @@ public class GzipUtil {
 	}
 
 	/**
-	 * check it is gzip or not
+	 * 
 	 * @param response
 	 * @return
 	 */
@@ -56,13 +52,12 @@ public class GzipUtil {
 		Map<String, String> headers = response.headers;
 		return headers != null
 				&& !headers.isEmpty()
-				&& (headers.containsKey(HEADER_USER_GZIP) || (headers
-						.containsKey(HEADER_ENCODING) && headers.get(
-						HEADER_ENCODING).equalsIgnoreCase(ENCODING_GZIP)));
+				&& (headers.containsKey(HEADER_ENCODING) && headers.get(
+						HEADER_ENCODING).equalsIgnoreCase(ENCODING_GZIP));
 	}
 
 	/**
-	 * gzip decompress
+	 * 
 	 * @param compressed
 	 * @return
 	 * @throws IOException

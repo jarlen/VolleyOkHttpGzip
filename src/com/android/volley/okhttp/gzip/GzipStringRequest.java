@@ -2,7 +2,10 @@ package com.android.volley.okhttp.gzip;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -32,6 +35,16 @@ public class GzipStringRequest extends StringRequest {
 	}
 
 	@Override
+	public Map<String, String> getHeaders() throws AuthFailureError {
+		HashMap<String, String> headers = new HashMap<String, String>();
+		if (mGzipEnabled) {
+			headers.put(GzipUtil.HEADER_ACCEPT_ENCODING, GzipUtil.ENCODING_GZIP);
+		}
+
+		return headers;
+	}
+
+	@Override
 	protected Response<String> parseNetworkResponse(NetworkResponse response) {
 		String parsed = null;
 		try {
@@ -54,7 +67,6 @@ public class GzipStringRequest extends StringRequest {
 		} catch (IOException e) {
 			return Response.error(new ParseError(e));
 		}
-
 	}
 
 	/** Disables GZIP compressing (enabled by default) */

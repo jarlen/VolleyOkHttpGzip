@@ -1,8 +1,10 @@
 package com.android.volley.okhttp.gzip;
 
 import java.io.UnsupportedEncodingException;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONObject;
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -106,6 +108,15 @@ public class GzipJsonObjectRequest extends JsonRequest<JSONObject> {
 			Listener<JSONObject> listener, ErrorListener errorListener) {
 		this(jsonRequest == null ? Method.GET : Method.POST, url, jsonRequest,
 				listener, errorListener);
+	}
+	@Override
+	public Map<String, String> getHeaders() throws AuthFailureError {
+		HashMap<String, String> headers = new HashMap<String, String>();
+		if(mGzipEnabled){
+			headers.put(GzipUtil.HEADER_ACCEPT_ENCODING, GzipUtil.ENCODING_GZIP);
+		}
+		
+		return headers;
 	}
 
 	@Override
