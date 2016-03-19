@@ -19,11 +19,15 @@ package com.android.volley.toolbox;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
 
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyLog;
 import com.android.volley.okhttp.OkHttpStack;
 
 import java.io.File;
@@ -46,8 +50,13 @@ public class Volley {
      * @return A started {@link RequestQueue} instance.
      */
     public static RequestQueue newRequestQueue(Context context,String customCacheDir, HttpStack stack, int maxDiskCacheBytes) {
-        File cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);
-
+        
+    	/* Begin: Added by jarlen for NO NetWork */
+		cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		/* End: Added by jarlen for NO NetWork */
+    	
+    	File cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);
         if (customCacheDir != null) {
 			cacheDir = new File(customCacheDir, DEFAULT_CACHE_DIR);
 		} else {
@@ -167,6 +176,41 @@ public class Volley {
 		return newRequestQueue(context, null, new OkHttpStack(
 				new OkHttpClient()));
 	}
+	
+	/* Begin: Added by jarlen for NO NetWork */
+	private static ConnectivityManager cm = null;
+
+	/**
+	 * check up the net
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isNetworkAvailable() {
+
+		boolean isNetworkAvailable = false;
+		if (cm == null) {
+			VolleyLog.e("isNetworkAvailable cm=null ");
+		} else {
+
+			try {
+				NetworkInfo[] info = cm.getAllNetworkInfo();
+				if (info != null) {
+					for (int i = 0; i < info.length; i++) {
+						if (info[i].getState() == State.CONNECTED) {
+							isNetworkAvailable = true;
+							break;
+						}
+					}
+				}
+			} catch (Exception e) {
+				VolleyLog.e("" + e.toString());
+			}
+
+		}
+		return isNetworkAvailable;
+	}
+	/* End: Added by jarlen for NO NetWork */
 
 }
 

@@ -1,11 +1,13 @@
 package com.android.volley.okhttp;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.Volley;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -66,6 +68,13 @@ public class OkHttpStack extends HurlStack {
 
 		okhttp3.Request okHttpRequest = okHttpRequestBuilder.build();
 		Call okHttpCall = client.newCall(okHttpRequest);
+		
+		/* Begin: Added by jarlen for NO NetWork */
+		if (!Volley.isNetworkAvailable()) {
+			throw new ConnectException("Failed to connect to " + request.getUrl());
+		}
+		/* End: Added by jarlen for NO NetWork */
+		
 		Response okHttpResponse = okHttpCall.execute();
 
 		StatusLine responseStatus = new BasicStatusLine(
