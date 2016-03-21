@@ -257,9 +257,9 @@ public class HurlStack implements HttpStack {
             connection.addRequestProperty(HEADER_CONTENT_TYPE, request.getBodyContentType());
             
             /* Begin: Added by jarlen for NO NetWork */
-			if (!Volley.isNetworkAvailable()) {
-				throw new ConnectException("Failed to connect to " + connection.getURL());
-			}
+//			if (!Volley.isNetworkAvailable()) {
+//				throw new ConnectException("Failed to connect to " + connection.getURL());
+//			}
 			/* End: Added by jarlen for NO NetWork */
             
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());

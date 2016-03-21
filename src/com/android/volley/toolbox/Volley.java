@@ -51,9 +51,8 @@ public class Volley {
      */
     public static RequestQueue newRequestQueue(Context context,String customCacheDir, HttpStack stack, int maxDiskCacheBytes) {
         
-    	/* Begin: Added by jarlen for NO NetWork */
-		cm = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+    	/* Begin: Added by jarlen for NO NetWork
+    	 *	cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		/* End: Added by jarlen for NO NetWork */
     	
     	File cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);

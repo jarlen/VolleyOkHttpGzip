@@ -70,9 +70,9 @@ public class OkHttpStack extends HurlStack {
 		Call okHttpCall = client.newCall(okHttpRequest);
 		
 		/* Begin: Added by jarlen for NO NetWork */
-		if (!Volley.isNetworkAvailable()) {
-			throw new ConnectException("Failed to connect to " + request.getUrl());
-		}
+//		if (!Volley.isNetworkAvailable()) {
+//			throw new ConnectException("Failed to connect to " + request.getUrl());
+//		}
 		/* End: Added by jarlen for NO NetWork */
 		
 		Response okHttpResponse = okHttpCall.execute();
