@@ -114,6 +114,16 @@ public abstract class JsonRequest<T> extends Request<T> {
 			return null;
 		}
 	}
+	
+	/**
+	 *  get body of request
+	 *  <br>
+	 *  @github.com/jarlen
+	 * @return
+	 */
+	public String getRequestBody(){
+		return mRequestBody == null ? "" : mRequestBody;
+	}
 
 	@Override
 	public String getCacheKey() {

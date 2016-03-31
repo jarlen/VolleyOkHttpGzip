@@ -109,14 +109,41 @@ public class GzipJsonObjectRequest extends JsonRequest<JSONObject> {
 		this(jsonRequest == null ? Method.GET : Method.POST, url, jsonRequest,
 				listener, errorListener);
 	}
+
 	@Override
 	public Map<String, String> getHeaders() throws AuthFailureError {
 		HashMap<String, String> headers = new HashMap<String, String>();
-		if(mGzipEnabled){
+		if (mGzipEnabled) {
 			headers.put(GzipUtil.HEADER_ACCEPT_ENCODING, GzipUtil.ENCODING_GZIP);
+
+			byte[] body = super.getBody();
+
+			if (body != null && body.length >= GzipUtil.HEADER_ENCODING_RANGE) {
+				headers.put(GzipUtil.HEADER_ENCODING, GzipUtil.ENCODING_GZIP);
+			}
 		}
-		
+
 		return headers;
+	}
+
+	@Override
+	public byte[] getBody() {
+		byte[] body = super.getBody();
+
+		try {
+			if (mGzipEnabled) {
+				if (body != null
+						&& body.length >= GzipUtil.HEADER_ENCODING_RANGE) {
+					body = GzipUtil
+							.compress(getRequestBody(), PROTOCOL_CHARSET);
+					return body;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return body;
 	}
 
 	@Override
