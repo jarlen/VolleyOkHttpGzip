@@ -1,6 +1,6 @@
 # VolleyOkHttpGzip
 
-This library includes two open source library code : 
+This library includes three open source library code : 
 
 volley(Mirror https://github.com/mcxiaoke/android-volley) ,
 
@@ -25,6 +25,8 @@ okio(Mirror : https://github.com/square/okio).
 5.	Modify newRequestQueue function for changing cache dir
 
 	private RequestQueue requestQueue = Volley.newRequestQueue(this, "mnt/sdcard/");
+	
+6.	add request with gzip
 
 
 这个库包括三个开源项目代码，Volley OkHttp,Gzip
@@ -45,7 +47,9 @@ okio(Mirror : https://github.com/square/okio).
 
 5.	改变volley请求队列创建接口，可以自定义缓存路径
 	
-	private RequestQueue requestQueue = Volley.newRequestQueue(this, "mnt/sdcard/");
+	private RequestQueue requestQueue = Volley.newRequestQueue(this, "mnt/sdcard/")
+
+6.	添加实现可以gzip数据压缩请求
 	
 
 小弟不才，仅仅在原有开源库基础上做了一些调整，欢迎大家检视代码并指正，有兴趣的同学可以一起优化。
